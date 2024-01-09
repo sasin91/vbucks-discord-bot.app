@@ -1,5 +1,24 @@
 models:
-  # ...
+  DiscordServer:
+    name: string
+    owner_id: id:users
+    api_url: string
+    application_id: string
+    public_key: text
+    token: text
 
+  DiscordGuild:
+    name: string
+    server_id: id:servers
+
+  DiscordCommand:
+    server_id: id:discord_servers
+    guild_id: nullable id:discord_guilds
+    name: string
+    name_localizations: nullable json
+    description: nullable string
+    description_localizations: nullable json
+    options: nullable json
+    channel_types: nullable json
 controllers:
   # ...
