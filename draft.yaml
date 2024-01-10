@@ -1,24 +1,24 @@
 models:
-  DiscordServer:
-    name: string
+  Account:
     owner_id: id:users
-    api_url: string
-    application_id: string
-    public_key: text
-    token: text
-
-  DiscordGuild:
+    provider: string # discord
+    provider_id: string # discord: snowflake id
+    nickname: string # discord: $username#$discriminator
     name: string
-    server_id: id:servers
+    email: nullable string
+    avatar: string # url to avatar
+    extra: json
+  Order:
+    account_id: id:accounts
+    status: string
+    status_reason: nullable string
+    total_cost: decimal
+  VBuck:
+    order_id: id:orders
+    amount: int
+    delivered_at: nullable timestamp
+    delivered_by: nullable id:users
 
-  DiscordCommand:
-    server_id: id:discord_servers
-    guild_id: nullable id:discord_guilds
-    name: string
-    name_localizations: nullable json
-    description: nullable string
-    description_localizations: nullable json
-    options: nullable json
-    channel_types: nullable json
 controllers:
   # ...
+seeders: Account
