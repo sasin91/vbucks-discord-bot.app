@@ -41,4 +41,13 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+    public function withDiscordAccount()
+    {
+        return $this->state(fn () => [
+            'discord_id' => Str::random(), // snowflake ID
+            'discord_nickname' => $this->faker->userName().'#'.str_pad(rand(0000, 9999), 0, 4),
+            'discord_metadata' => [],
+        ]);
+    }
 }

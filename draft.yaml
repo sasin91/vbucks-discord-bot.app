@@ -1,24 +1,17 @@
 models:
-  Account:
-    owner_id: id:users
-    provider: string # discord
-    provider_id: string # discord: snowflake id
-    nickname: string # discord: $username#$discriminator
-    name: string
-    email: nullable string
-    avatar: string # url to avatar
-    extra: json
   Order:
-    account_id: id:accounts
+    id: uuid
+    customer_id: id:user
     status: string
     status_reason: nullable string
     total_cost: decimal
   VBuck:
-    order_id: id:orders
+    order_id: id:order
+    character_name: string # putting this here, so there's room for other orderables outside ingame
     amount: int
+    cost: decimal
     delivered_at: nullable timestamp
     delivered_by: nullable id:users
 
 controllers:
   # ...
-seeders: Account

@@ -1,2 +1,12 @@
+created:
+    - database/factories/OrderFactory.php
+    - database/factories/VBuckFactory.php
+    - database/migrations/2024_01_10_070328_create_orders_table.php
+    - database/migrations/2024_01_10_070329_create_v_bucks_table.php
+    - app/Models/Order.php
+    - app/Models/VBuck.php
+    - database/seeders/AccountSeeder.php
 models:
     User: {  }
+    Order: { id: uuid, customer_id: 'id:users', status: string, status_reason: 'nullable string', total_cost: decimal }
+    VBuck: { order_id: 'id:orders', character_name: string, amount: int, const: decimal, delivered_at: 'nullable timestamp', delivered_by: 'nullable id:users' }

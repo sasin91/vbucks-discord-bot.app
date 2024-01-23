@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\CheckoutCancelController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\CheckoutSuccessController;
+use App\Http\Controllers\DiscordInteractionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,7 +17,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::post('/discord', DiscordInteractionController::class);
+
 Route::view('/', 'welcome');
+
+Route::post('/checkout', CheckoutController::class)->name('checkout');
+Route::get('/checkout/success', CheckoutSuccessController::class)->name('checkout.success');
+Route::get('/checkout/cancel', CheckoutCancelController::class)->name('checkout.cancel');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])

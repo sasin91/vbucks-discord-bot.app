@@ -30,11 +30,4 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
-
-    'discord' => [
-        'token' => env('DISCORD_API_BOT_TOKEN'),
-        'api_url' => env('DISCORD_API_URL', 'https://discord.com/api'),
-        'application_id' => env('DISCORD_APPLICATION_ID'),
-        'public_key' => env('DISCORD_PUBLIC_KEY'),
-    ]
 ];
