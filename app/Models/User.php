@@ -23,8 +23,8 @@ use Spatie\Permission\Traits\HasRoles;
  */
 class User extends Authenticatable
 {
-    const string ROLE_STAFF = 'staff';
-    const string ROLE_CUSTOMER = 'customer';
+    const ROLE_STAFF = 'staff';
+    const ROLE_CUSTOMER = 'customer';
 
     use Billable;
     use CausesActivity, LogsActivity;

@@ -6,12 +6,16 @@ use App\Data\CheckoutData;
 use App\Data\VBuckData;
 use App\Features\OrderPayments;
 use App\Models\Order;
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use Nwilging\LaravelDiscordBot\Contracts\Listeners\ApplicationCommandInteractionEventListenerContract;
 use Nwilging\LaravelDiscordBot\Events\ApplicationCommandInteractionEvent;
 
 class OnSlashVBucks implements ApplicationCommandInteractionEventListenerContract
 {
+    const AMOUNT = 'amount';
+
+    const ACCOUNT = 'account';
+
     public function command(): ?string
     {
         return '/vbucks';
@@ -19,36 +23,41 @@ class OnSlashVBucks implements ApplicationCommandInteractionEventListenerContrac
 
     public function amount($event): int
     {
-        return $event->getInteractionRequest()->getInt('amount');
+        return $event->getInteractionRequest()->getInt(OnSlashVBucks::AMOUNT);
     }
 
-    public function character($event): string
+    public function account($event): string
     {
-        return $event->getInteractionRequest()->getString('character');
+        return $event->getInteractionRequest()->getString(OnSlashVBucks::ACCOUNT);
+    }
+
+    public function discordId($event): ?string
+    {
+        $member = $event->getInteractionRequest()->all('member');
+
+        return isset($member['user'])
+            ? $member['user']['id']
+            : null;
     }
 
     public function replyContent(ApplicationCommandInteractionEvent $event): ?string
     {
         $amount = $this->amount($event);
-        $characterName = $this->character($event);
-
-        if ($amount <= 0) {
-            return 'How many do you want?';
-        }
-
-        if (blank($characterName)) {
-            return 'Which character do you want to receive the vbucks?';
-        }
+        $account = $this->account($event);
+        $discordId = $this->discordId($event);
+        $customer = $discordId
+            ? User::query()->where('discord_id', $discordId)->firstOrFail()
+            : User::defaultCheckoutCustomer();
 
         $order = Order::fromCheckoutData(
-            CheckoutData::from(
+            new CheckoutData(
                 vbucks: VBuckData::collection([
-                    [
-                        'character_name' => $characterName,
-                        'amount' => $amount,
-                    ],
+                    new VBuckData(
+                        account: $account,
+                        amount: $amount
+                    ),
                 ]),
-                customer: Auth::user()
+                customer: $customer
             )
         );
 
@@ -62,7 +71,7 @@ class OnSlashVBucks implements ApplicationCommandInteractionEventListenerContrac
             : sprintf(
                 'Understood, an order for %d VBucks to %s has been created.',
                 number_format((float) $amount),
-                $characterName
+                $account
             );
     }
 

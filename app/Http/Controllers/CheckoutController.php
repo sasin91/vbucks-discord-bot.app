@@ -14,8 +14,10 @@ class CheckoutController extends Controller
      */
     public function __invoke(Request $request, CheckoutData $checkoutData)
     {
+        $checkoutData->customer = $request->user();
+
         $order = DB::transaction(
-            fn () => Order::fromCheckoutData($checkoutData, $request->user()),
+            fn () => Order::fromCheckoutData($checkoutData),
             3
         );
 

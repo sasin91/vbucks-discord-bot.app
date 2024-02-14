@@ -14,10 +14,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $registerDiscordCommands = new DiscordCommands();
-        $registerDiscordCommands->register(
-            $this->app->make(DiscordApplicationCommandServiceContract::class)
-        );
+        // $registerDiscordCommands = new DiscordCommands();
+        // $registerDiscordCommands->register(
+        //     $this->app->make(DiscordApplicationCommandServiceContract::class)
+        // );
     }
 
     /**

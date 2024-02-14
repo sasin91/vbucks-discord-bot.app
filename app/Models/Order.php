@@ -5,17 +5,17 @@ namespace App\Models;
 use App\Data\CheckoutData;
 use App\Data\VBuckData;
 use App\Enums\OrderStatus;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Order extends Model
 {
-    use HasFactory, HasUuids;
+    use HasFactory;
     use LogsActivity;
 
     /**
@@ -24,6 +24,7 @@ class Order extends Model
      * @var array
      */
     protected $fillable = [
+        'reference',
         'customer_id',
         'status',
         'status_reason',
@@ -41,10 +42,10 @@ class Order extends Model
         'total_cost' => 'decimal',
     ];
 
-    public static function fromCheckoutData(CheckoutData $checkoutData, ?User $customer = null)
+    public static function fromCheckoutData(CheckoutData $checkoutData)
     {
         $order = new Order();
-        $order->customer()->associate($customer ?? User::defaultCheckoutCustomer());
+        $order->customer()->associate($checkoutData->customer);
         $order->status = OrderStatus::NEW;
         $order->total_cost = 0;
         $order->saveOrFail();
@@ -53,10 +54,27 @@ class Order extends Model
             $order->vbucks()->create($vBuckData->all());
         });
 
-        $order->total_cost = $order->vbucks->sum('amount');
+        // this should be filled thru stripe price
+        // $order->total_cost = $order->vbucks->sum('amount');
         $order->saveOrFail();
 
         return $order;
+    }
+
+    /**
+     * Perform any actions required after the model boots.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::creating(static function (Order $order) {
+            if (blank($order->reference)) {
+                $order->reference = (string) Str::orderedUuid();
+            }
+        });
+
+        parent::booted();
     }
 
     public function checkout()

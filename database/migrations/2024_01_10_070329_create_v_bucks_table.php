@@ -13,10 +13,9 @@ return new class extends Migration
     {
         Schema::create('v_bucks', function (Blueprint $table) {
             $table->id();
-            $table->foreignUuid('order_id');
-            $table->string('character_name');
+            $table->foreignId('order_id');
+            $table->string('account');
             $table->string('amount');
-            $table->decimal('cost');
             $table->timestamp('delivered_at')->nullable();
             $table->foreignId('delivered_by')->nullable();
             $table->timestamps();

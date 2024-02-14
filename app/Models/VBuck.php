@@ -17,9 +17,9 @@ class VBuck extends Model
      */
     protected $fillable = [
         'order_id',
-        'character_name',
+        'account',
         'amount',
-        'const',
+        'cost',
         'delivered_at',
         'delivered_by',
     ];
@@ -30,20 +30,17 @@ class VBuck extends Model
      * @var array
      */
     protected $casts = [
-        'id' => 'integer',
-        'order_id' => 'integer',
-        'const' => 'decimal',
+        'cost' => 'decimal',
         'delivered_at' => 'timestamp',
-        'delivered_by' => 'integer',
     ];
 
     public function order(): BelongsTo
     {
-        return $this->belongsTo(Orders::class);
+        return $this->belongsTo(Order::class);
     }
 
     public function deliveredBy(): BelongsTo
     {
-        return $this->belongsTo(Users::class);
+        return $this->belongsTo(User::class, 'delivered_by');
     }
 }
