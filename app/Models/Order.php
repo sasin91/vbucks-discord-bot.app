@@ -5,11 +5,13 @@ namespace App\Models;
 use App\Data\CheckoutData;
 use App\Data\VBuckData;
 use App\Enums\OrderStatus;
+use App\Services\CheckoutService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
+use Laravel\Cashier\Checkout;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -77,18 +79,9 @@ class Order extends Model
         parent::booted();
     }
 
-    public function checkout()
+    public function checkout(): Checkout
     {
-        $stripePriceId = config('vbucks.stripe.price_id');
-        $quantity = $this->vbucks->count();
-
-        return $this->customer->checkout([$stripePriceId => $quantity], [
-            'success_url' => route('checkout.success').'?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url' => route('checkout.cancel'),
-            'metadata' => [
-                'order_id' => $this->id,
-            ],
-        ]);
+        return app(CheckoutService::class)->checkout($this);
     }
 
     public function getActivitylogOptions(): LogOptions

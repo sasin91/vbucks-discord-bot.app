@@ -7,6 +7,7 @@ use App\Data\VBuckData;
 use App\Features\OrderPayments;
 use App\Models\Order;
 use App\Models\User;
+use Illuminate\Support\Collection;
 use Nwilging\LaravelDiscordBot\Contracts\Listeners\ApplicationCommandInteractionEventListenerContract;
 use Nwilging\LaravelDiscordBot\Events\ApplicationCommandInteractionEvent;
 
@@ -21,14 +22,37 @@ class OnSlashVBucks implements ApplicationCommandInteractionEventListenerContrac
         return '/vbucks';
     }
 
+    public function option($event, $predicate = null, $default = null)
+    {
+        $options = new Collection($event->getInteractionRequest()->all('options'));
+
+        $value = $predicate
+            ? $options->firstWhere($predicate)
+            : $options;
+
+        return $value ?? $default;
+    }
+
     public function amount($event): int
     {
-        return $event->getInteractionRequest()->getInt(OnSlashVBucks::AMOUNT);
+        $option = $this->option(
+            $event,
+            fn ($option) => $option['name'] === OnSlashVBucks::AMOUNT,
+            0
+        );
+
+        return (int) $option['value'];
     }
 
     public function account($event): string
     {
-        return $event->getInteractionRequest()->getString(OnSlashVBucks::ACCOUNT);
+        $option = $this->option(
+            $event,
+            fn ($option) => $option['name'] === OnSlashVBucks::ACCOUNT,
+            ''
+        );
+
+        return (string) $option['value'];
     }
 
     public function discordId($event): ?string
@@ -45,6 +69,7 @@ class OnSlashVBucks implements ApplicationCommandInteractionEventListenerContrac
         $amount = $this->amount($event);
         $account = $this->account($event);
         $discordId = $this->discordId($event);
+
         $customer = $discordId
             ? User::query()->where('discord_id', $discordId)->firstOrFail()
             : User::defaultCheckoutCustomer();
