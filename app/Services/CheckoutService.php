@@ -11,7 +11,7 @@ class CheckoutService
         $products = [];
 
         if ($order->vbucks->count() > 0) {
-            $products[] = [
+            $products = [
                 config('vbucks.stripe.price_id') => $order->vbucks->count(),
             ];
         }
