@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Disord\Commands\VBucks;
 use App\Enums\OrderStatus;
 use App\Models\Order;
 use Illuminate\Http\Request;
@@ -22,12 +21,6 @@ class CheckoutSuccessController extends Controller
         $order = Order::query()->findOrFail($orderId);
 
         $order->update(['status' => OrderStatus::PAID]);
-
-        if ($order->vbucks->isNotEmpty()) {
-            $slashVBucksCommand = new VBucks();
-
-            $slashVBucksCommand->onCheckoutSuccess($order);
-        }
 
         return view('checkout.success', ['order' => $order]);
     }

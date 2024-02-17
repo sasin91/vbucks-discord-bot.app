@@ -16,6 +16,7 @@ class CheckoutController extends Controller
     {
         $checkoutData->customer = $request->user();
 
+        /** @var Order $order */
         $order = DB::transaction(
             fn () => Order::fromCheckoutData($checkoutData),
             3
