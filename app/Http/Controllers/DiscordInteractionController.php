@@ -14,7 +14,7 @@ class DiscordInteractionController
     {
         $this->ensureCustomerExists($request);
 
-        return match ($request->json('context.data.name')) {
+        return match ($request->json('data.name')) {
             'vbucks' => new VBucks(),
             default => $this->notifyDevsAboutUnexpectedCommand($request)
         };
@@ -42,7 +42,7 @@ class DiscordInteractionController
 
     private function notifyDevsAboutUnexpectedCommand(Request $request)
     {
-        Log::info("Received unhandled discord command [{$request->json('context.data.name')}]", $request->json()->all());
+        Log::info("Received unhandled discord command [{$request->json('data.name')}]", $request->json()->all());
 
         return new Response('Command not found.', 404);
     }

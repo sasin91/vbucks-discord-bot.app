@@ -41,7 +41,7 @@ class VBucks extends DiscordCommand
     public function option(Request $request, Closure $predicate, $default = null)
     {
         return $request
-            ->collect('context.data.options')
+            ->collect('data.options')
             ->firstWhere($predicate) ?? $default;
     }
 
@@ -69,7 +69,7 @@ class VBucks extends DiscordCommand
 
     public function discordId(Request $request): ?string
     {
-        return $request->string('context.member.user.id');
+        return $request->string('member.user.id');
     }
 
     public function content(Request $request): string
