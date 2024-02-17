@@ -114,11 +114,14 @@ class VBucks extends DiscordCommand
      * @param  \Illuminate\Http\Request  $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function toResponse($request): Response
+    public function toResponse($request)
     {
-        return new Response([
-            'content' => $this->content($request),
-            'ephemeral' => true,
+        return response()->json([
+            'type' => self::RESPONSE_TYPE_CHANNEL_MESSAGE_WITH_SOURCE,
+            'data' => [
+                'content' => $this->content($request),
+                'ephemeral' => true,
+            ],
         ]);
     }
 }

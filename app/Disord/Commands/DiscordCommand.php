@@ -47,6 +47,25 @@ abstract class DiscordCommand implements Responsable
 
     public const OPTION_TYPE_ATTACHMENT = 11;
 
+    /**
+     * The available response types
+     *
+     * @see https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-response-object
+     */
+    public const RESPONSE_TYPE_PONG = 1;
+
+    public const RESPONSE_TYPE_CHANNEL_MESSAGE_WITH_SOURCE = 4;
+
+    public const RESPONSE_TYPE_DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE = 5;
+
+    public const RESPONSE_TYPE_DEFERRED_UPDATE_MESSAGE = 6;
+
+    public const RESPONSE_TYPE_UPDATE_MESSAGE = 7;
+
+    public const RESPONSE_TYPE_APPLICATION_COMMAND_AUTOCOMPLETE_RESULT = 8;
+
+    public const RESPONSE_TYPE_MODAL = 9;
+
     public function applicationId(): string
     {
         return config('discord.application_id');
