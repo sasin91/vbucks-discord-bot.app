@@ -1,11 +1,8 @@
 <?php
 
-use App\Disord\DiscordCommands;
-use Nwilging\LaravelDiscordBot\Contracts\Services\DiscordApplicationCommandServiceContract;
 use App\Http\Controllers\CheckoutCancelController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CheckoutSuccessController;
-use App\Http\Controllers\DiscordInteractionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,10 +15,6 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-Route::get('/discord/register-commands', function (DiscordCommands $DiscordCommands, DiscordApplicationCommandServiceContract $DiscordApplicationCommandService) {
-    $DiscordCommands->register($DiscordApplicationCommandService);
-});
 
 Route::view('/', 'welcome');
 

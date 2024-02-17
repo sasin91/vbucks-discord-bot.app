@@ -21,7 +21,6 @@
         "laravel/tinker": "^2.8",
         "livewire/livewire": "^3.0",
         "livewire/volt": "^1.0",
-        "nwilging/laravel-discord-bot": "^1.1",
         "socialiteproviders/discord": "^4.2",
         "spatie/laravel-activitylog": "^4.7",
         "spatie/laravel-data": "^3.11",
@@ -38,6 +37,7 @@
         "nunomaduro/collision": "^7.0",
         "pestphp/pest": "^2.0",
         "pestphp/pest-plugin-laravel": "^2.0",
+        "pestphp/pest-plugin-watch": "^2.0",
         "spatie/laravel-ignition": "^2.0"
     },
     "autoload": {

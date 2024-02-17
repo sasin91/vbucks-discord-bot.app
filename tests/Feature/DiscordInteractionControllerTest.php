@@ -1,17 +1,16 @@
 <?php
 
-use App\Listeners\OnSlashVBucks;
+use App\Http\Middleware\VerifyDiscordSignature;
 use App\Models\User;
 use App\Models\VBuck;
 use App\Services\CheckoutService;
 use Laravel\Cashier\Checkout;
-use Nwilging\LaravelDiscordBot\Events\ApplicationCommandInteractionEvent;
 use Stripe\Checkout\Session;
-use Symfony\Component\HttpFoundation\ParameterBag;
 
 use function Pest\Laravel\mock;
+use function Pest\Laravel\withoutMiddleware;
 
-it('creates an order for a /vbucks command', function () {
+it('creates an order for a /vbucks command', function ($data) {
     /** @var User $customer */
     $customer = User::factory()->create([
         'discord_id' => '123456789012345678',
@@ -28,40 +27,23 @@ it('creates an order for a /vbucks command', function () {
             })
         ));
 
-    $event = new ApplicationCommandInteractionEvent(
-        new ParameterBag([
-            'name' => 'vbucks',
-            'options' => [
-                [
-                    'name' => 'amount',
-                    'type' => 4,
-                    'value' => 500,
-                ],
-                [
-                    'name' => 'account',
-                    'type' => 3,
-                    'value' => 'sasin91',
-                ],
-            ],
-            'type' => 1,
-            'member' => [
-                'user' => [
-                    'avatar' => '972794f582c7ec4a2793bbf30388a877',
-                    'global_name' => 'sasin91',
-                    'id' => '123456789012345678',
-                    'public_flags' => 0,
-                    'username' => 'sasin91',
-                ],
-            ],
-        ])
+    $response = withoutMiddleware(VerifyDiscordSignature::class)->postJson(
+        '/api/discord',
+        $data
     );
 
-    $handler = new OnSlashVBucks();
-    $reply = $handler->replyContent($event);
-    expect($reply)
+    $response->assertOk();
+
+    $content = $response->json('content');
+    $ephemeral = $response->json('ephemeral');
+
+    expect($content)
         ->toBeString()
         ->toContain('http://localhost/test');
 
+    expect($ephemeral)
+        ->toBeBool()
+        ->toEqual(true);
     $order = $customer->orders()->with('vbucks')->firstOrFail();
 
     expect($order->vbucks->count())->toBe(1);
@@ -71,4 +53,14 @@ it('creates an order for a /vbucks command', function () {
 
     expect((int) $product->amount)->toBe(500);
     expect($product->account)->toBe('sasin91');
-});
+})->with([
+    function () {
+        $json = file_get_contents(base_path('/tests/__fixtures__/discord.slashvbucks.json'));
+        $data = \json_decode($json, true);
+        if (\json_last_error() !== \JSON_ERROR_NONE) {
+            throw new \InvalidArgumentException('json_decode error: '.\json_last_error_msg());
+        }
+
+        return $data;
+    },
+]);

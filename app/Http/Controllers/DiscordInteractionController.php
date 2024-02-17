@@ -2,17 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Disord\Commands\VBucks;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Nwilging\LaravelDiscordBot\Contracts\Services\DiscordInteractionServiceContract;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 
 class DiscordInteractionController
 {
-    public function __invoke(Request $request, DiscordInteractionServiceContract $interactionService)
+    public function __invoke(Request $request)
     {
-        logger()->info('payload', $request->json()->all());
-        logger()->info('headers', $request->headers->all());
+        $this->ensureCustomerExists($request);
 
+        return match ($request->json('context.data.name')) {
+            'vbucks' => new VBucks(),
+            default => $this->notifyDevsAboutUnexpectedCommand($request)
+        };
+    }
+
+    private function ensureCustomerExists(Request $request)
+    {
         $discordUser = $request->json('member.user', []);
 
         if (filled($discordUser) && User::query()->where('discord_id', $discordUser)->doesntExist()) {
@@ -29,9 +38,12 @@ class DiscordInteractionController
                 ),
             ]);
         }
+    }
 
-        $response = $interactionService->handleInteractionRequest($request);
+    private function notifyDevsAboutUnexpectedCommand(Request $request)
+    {
+        Log::info("Received unhandled discord command [{$request->json('context.data.name')}]", $request->json()->all());
 
-        return response()->json($response->toArray(), $response->getStatus());
+        return new Response('Command not found.', 404);
     }
 }

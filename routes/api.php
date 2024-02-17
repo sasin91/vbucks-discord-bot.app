@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DiscordInteractionController;
+use App\Http\Middleware\VerifyDiscordSignature;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/discord', DiscordInteractionController::class);
+Route::middleware(VerifyDiscordSignature::class)->post('/discord', DiscordInteractionController::class);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

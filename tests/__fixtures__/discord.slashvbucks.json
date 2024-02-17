@@ -1,0 +1,86 @@
+{
+    "message": "payload",
+    "context": {
+        "app_permissions": "559624142450241",
+        "application_id": "1196842574221152368",
+        "channel": {
+            "flags": 0,
+            "guild_id": "1199738955915067464",
+            "icon_emoji": {
+                "id": null,
+                "name": "👋"
+            },
+            "id": "1199738956821053462",
+            "last_message_id": "1202501197844709407",
+            "name": "general",
+            "nsfw": false,
+            "parent_id": "1199738956821053460",
+            "permissions": "562949953421311",
+            "position": 0,
+            "rate_limit_per_user": 0,
+            "theme_color": null,
+            "topic": null,
+            "type": 0
+        },
+        "channel_id": "1199738956821053462",
+        "data": {
+            "id": "1196843271201239123",
+            "name": "vbucks",
+            "options": [
+                {
+                    "name": "amount",
+                    "type": 4,
+                    "value": 500
+                },
+                {
+                    "name": "account",
+                    "type": 3,
+                    "value": "sasin91"
+                }
+            ],
+            "type": 1
+        },
+        "entitlement_sku_ids": [],
+        "entitlements": [],
+        "guild": {
+            "features": [],
+            "id": "1199738955915067464",
+            "locale": "en-US"
+        },
+        "guild_id": "1199738955915067464",
+        "guild_locale": "en-US",
+        "id": "1207074170471718974",
+        "locale": "en-GB",
+        "member": {
+            "avatar": null,
+            "communication_disabled_until": null,
+            "deaf": false,
+            "flags": 0,
+            "joined_at": "2024-01-24T15:34:17.271000+00:00",
+            "mute": false,
+            "nick": null,
+            "pending": false,
+            "permissions": "562949953421311",
+            "premium_since": null,
+            "roles": [],
+            "unusual_dm_activity_until": null,
+            "user": {
+                "avatar": "972794f582c7ec4a2793bbf30388a877",
+                "avatar_decoration_data": null,
+                "discriminator": "0",
+                "global_name": "sasin91",
+                "id": "123456789012345678",
+                "public_flags": 0,
+                "username": "sasin91"
+            }
+        },
+        "token": "REDACTED",
+        "type": 2,
+        "version": 1
+    },
+    "level": 200,
+    "level_name": "INFO",
+    "channel": "production",
+    "datetime": "2024-02-13T21:21:49.605471+00:00",
+    "extra": {}
+}

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Disord\Commands\SlashVBucksCommand;
+use App\Disord\Commands\VBucks;
 use App\Enums\OrderStatus;
 use App\Models\Order;
 use Illuminate\Http\Request;
@@ -24,7 +24,7 @@ class CheckoutSuccessController extends Controller
         $order->update(['status' => OrderStatus::PAID]);
 
         if ($order->vbucks->isNotEmpty()) {
-            $slashVBucksCommand = new SlashVBucksCommand();
+            $slashVBucksCommand = new VBucks();
 
             $slashVBucksCommand->onCheckoutSuccess($order);
         }

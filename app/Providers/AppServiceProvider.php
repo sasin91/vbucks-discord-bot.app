@@ -2,10 +2,8 @@
 
 namespace App\Providers;
 
-use App\Disord\DiscordCommands;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
-use Nwilging\LaravelDiscordBot\Contracts\Services\DiscordApplicationCommandServiceContract;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -14,10 +12,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // $registerDiscordCommands = new DiscordCommands();
-        // $registerDiscordCommands->register(
-        //     $this->app->make(DiscordApplicationCommandServiceContract::class)
-        // );
+        //
     }
 
     /**
