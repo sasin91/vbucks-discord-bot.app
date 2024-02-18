@@ -3,6 +3,7 @@
 use App\Http\Controllers\CheckoutCancelController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CheckoutSuccessController;
+use App\Livewire\Welcome;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,18 +17,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::view('/', 'welcome');
+Route::get('/', Welcome::class);
 
 Route::post('/checkout', CheckoutController::class)->name('checkout');
 Route::get('/checkout/success', CheckoutSuccessController::class)->name('checkout.success');
 Route::get('/checkout/cancel', CheckoutCancelController::class)->name('checkout.cancel');
-
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
-
-Route::view('profile', 'profile')
-    ->middleware(['auth'])
-    ->name('profile');
-
-require __DIR__.'/auth.php';
